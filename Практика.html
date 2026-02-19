@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Менеджер задач студента</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    h1 {
+      color: #333;
+    }
+    #taskList li {
+      display: flex;
+      justify-content: space-between;
+      margin: 5px 0;
+      padding: 5px;
+      border-bottom: 1px solid #ccc;
+    }
+    .completed {
+      text-decoration: line-through;
+      color: gray;
+    }
+    button {
+      margin-left: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Менеджер задач</h1>
+  <input type="text" id="taskInput" placeholder="Введите задачу">
+  <button id="addTaskBtn">Добавить</button>
+  <ul id="taskList"></ul>
+  <p>Всего задач: <span id="taskCount">0</span></p>
+
+  <script>
+    const taskInput = document.getElementById("taskInput");
+    const addTaskBtn = document.getElementById("addTaskBtn");
+    const taskList = document.getElementById("taskList");
+    const taskCount = document.getElementById("taskCount");
+
+    let tasks = [];
+
+    addTaskBtn.addEventListener("click", () => {
+      const taskText = taskInput.value.trim();
+      if (taskText !== "") {
+        const task = { text: taskText, completed: false };
+        tasks.push(task);
+        renderTasks();
+        taskInput.value = "";
+      }
+    });
+
+    function renderTasks() {
+      taskList.innerHTML = "";
+      tasks.forEach((task, index) => {
+        const li = document.createElement("li");
+
+        const span = document.createElement("span");
+        span.textContent = task.text;
+        if (task.completed) span.classList.add("completed");
+
+        span.addEventListener("click", () => {
+          task.completed = !task.completed;
+          renderTasks();
+        });
+
+        const deleteBtn = document.createElement("button");
+        deleteBtn.textContent = "Удалить";
+        deleteBtn.addEventListener("click", () => {
+          tasks.splice(index, 1);
+          renderTasks();
+        });
+
+        li.appendChild(span);
+        li.appendChild(deleteBtn);
+        taskList.appendChild(li);
+      });
+
+      taskCount.textContent = tasks.length;
+    }
+  </script>
+</body>
+</html>
